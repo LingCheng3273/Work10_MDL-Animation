@@ -1,3 +1,4 @@
+from mdl import *
 import mdl
 from display import *
 from matrix import *
@@ -20,8 +21,32 @@ from draw import *
 
   jdyrlandweaver
   ==================== """
-def first_pass( commands ):
-    pass
+def first_pass( commands):
+    isVary = False
+    isFrames = False
+    isName = False
+    for command in commands:
+        print command
+        if command[0] == 'frames':
+            print 'setting frames to ' + str(command[1])
+            isFrames = True
+            frames = command[1]
+        elif command[0] == 'basename':
+            print 'setting basename to ' + str(command[1])
+            isName = True
+            basename = command[1]
+        elif command[0] == 'vary':
+            print 'found vary'
+            isVary = True
+    if isVary and not isFrames:
+        return
+    if isFrames and not isName:
+        print "basename has been set to 'pic'"
+        basename = 'pic'
+
+    print 'frames: ' + str(frames)
+    print 'basename: ' + str(basename)
+
 
 
 """======== second_pass( commands ) ==========
@@ -41,8 +66,12 @@ def first_pass( commands ):
   dictionary corresponding to the given knob with the
   appropirate value. 
   ===================="""
-def second_pass( commands, num_frames ):
-    pass
+def second_pass( commands, symbols ):
+    #command: ['name', 'knob', start_frame, end_fame, start_val, end_val]
+    for command in commands:
+        if command[0] == 'vary':
+            vary(symbols, command[1], command[2], command[3], command[4], command [5])
+        print symbols
 
 
 def run(filename):
@@ -60,8 +89,9 @@ def run(filename):
     else:
         print "Parsing failed."
         return
-
-    ident(tmp)
+    first_pass(commands)
+    second_pass(commands, symbols)
+    '''ident(tmp)
     stack = [ [x[:] for x in tmp] ]
     screen = new_screen()
     tmp = []
@@ -119,3 +149,4 @@ def run(filename):
             display(screen)
         elif c == 'save':
             save_extension(screen, args[0])
+            '''

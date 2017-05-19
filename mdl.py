@@ -270,6 +270,38 @@ def p_NUMBER(p):
               | INT"""
     p[0] = p[1]
 
+def setFrames(num):
+    frames = num
+
+def vary(symbols, name, start_frame, end_frame, start_val, end_val):
+    print 'varying'
+    start_val = float(start_val)
+    end_val = float(end_val)
+    start_frame = float(start_frame)
+    end_frame = float(end_frame)
+    increase = (end_val - start_val)/ (end_frame - start_frame)
+    #index is 1 ahead of frame
+    if start_frame == 0:
+        symbols[name][int(start_frame) + 1] = start_val
+        index = int(start_frame) + 2
+    else:
+        index = int(start_frame) + 1
+    for frame in range (int(end_frame - start_frame)):
+        #print "symbols[name]:"
+        #print symbols[name]
+        print 'index: ' + str(index)
+        symbols[name] += [symbols[name][index - 1] + increase]
+        index+= 1
+        #print symbols
+
+def setKnob(symbols, name, value):
+    print symbols[name]
+    symbols[name][1] = value
+
+def setAllKnobs(symbols, value):
+    for knob in symbols:
+        symbols[knob][1] = value
+
 yacc.yacc()
 
 from copy import deepcopy
@@ -284,6 +316,10 @@ def parseFile(filename):
     """
     global commands
     global symbols
+    global frames
+    global basename
+    frames = 0
+    basename = ''
     commands = []
     symbols = {}
     try:
