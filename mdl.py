@@ -273,39 +273,39 @@ def p_NUMBER(p):
 def setFrames(num):
     frames = num
 
-def vary(symbols, name, start_frame, end_frame, start_val, end_val):
-    print 'varying'
+def vary(name, start_frame, end_frame, start_val, end_val):
+    global hash_table
     start_val = float(start_val)
     end_val = float(end_val)
     start_frame = float(start_frame)
     end_frame = float(end_frame)
     increase = (end_val - start_val)/ (end_frame - start_frame)
-    #index is 1 ahead of frame
     if start_frame == 0:
-        symbols[name][int(start_frame) + 1] = start_val
-        index = int(start_frame) + 2
-    else:
+        hash_table[name] = [start_val]
         index = int(start_frame) + 1
-    for frame in range (int(end_frame - start_frame)):
-        #print "symbols[name]:"
-        #print symbols[name]
-        print 'index: ' + str(index)
-        symbols[name] += [symbols[name][index - 1] + increase]
+    else:
+        index = int(start_frame)    
+    for frame in range (int(end_frame - start_frame)+1):
+        hash_table[name] += [hash_table[name][index - 1] + increase]
         index+= 1
-        #print symbols
+    
 
 def setKnob(symbols, name, value):
-    print symbols[name]
-    symbols[name][1] = value
+    symbols[name] = value
 
 def setAllKnobs(symbols, value):
     for knob in symbols:
-        symbols[knob][1] = value
+        symbols[knob] = value
 
 yacc.yacc()
 
 from copy import deepcopy
 
+global frames
+frames = 1
+global hash_table
+hash_table = {}
+ 
 def parseFile(filename):
     """
     This funstion returns a tuple containing a list of opcodes
@@ -316,10 +316,6 @@ def parseFile(filename):
     """
     global commands
     global symbols
-    global frames
-    global basename
-    frames = 0
-    basename = ''
     commands = []
     symbols = {}
     try:
