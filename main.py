@@ -7,3 +7,4 @@ elif len(sys.argv) == 1:
     run(raw_input("please enter the filename of an mdl script file: \n"))
 else:
     print "Too many arguments."
+

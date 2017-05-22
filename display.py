@@ -31,7 +31,7 @@ def clear_screen( screen ):
             screen[y][x] = DEFAULT_COLOR[:]
 
 def save_ppm( screen, fname ):
-    f = open( fname, 'w' )
+    f = open( 'anim/' + fname+ '.ppm', 'w' )
     ppm = 'P3\n' + str(len(screen[0])) +' '+ str(len(screen)) +' '+ str(MAX_COLOR) +'\n'
     for y in range( len(screen) ):
         row = ''
@@ -47,9 +47,9 @@ def save_ppm( screen, fname ):
 def save_extension( screen, fname ):
     ppm_name = fname[:fname.find('.')] + '.ppm'
     save_ppm( screen, ppm_name )
-    p = Popen( ['convert', ppm_name, fname ], stdin=PIPE, stdout = PIPE )
+    p = Popen( ['convert', ppm_name, fname], stdin=PIPE, stdout = PIPE )
     p.communicate()
-    remove(ppm_name)
+    #remove('anim/' + ppm_name)
 
 def display( screen ):
     ppm_name = 'pic.ppm'
@@ -62,8 +62,7 @@ def make_animation( name ):
     name_arg = 'anim/' + name + '*'
     name = name + '.gif'
     print 'Saving animation as ' + name
-    #f = fork()
-    #if f == 0:
     execlp('convert', 'convert', '-delay', '3', name_arg, name)
+    
     
     
